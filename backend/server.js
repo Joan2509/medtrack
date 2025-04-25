@@ -62,3 +62,11 @@ app.get('/api/clients/:clientId', (req, res) => {
       }
     );
   });
+
+  // Get all programs (for dropdown)
+app.get('/api/programs', (req, res) => {
+    db.all(`SELECT id, name FROM programs`, [], (err, rows) => {
+      if (err) return res.status(400).json({ error: err.message });
+      res.json(rows);
+    });
+  });
