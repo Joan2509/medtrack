@@ -39,3 +39,26 @@ app.post('/api/clients/:clientId/enroll', (req, res) => {
       });
     });
   });
+
+  // View client profile
+app.get('/api/clients/:clientId', (req, res) => {
+    const clientId = req.params.clientId;
+    db.get(
+      `SELECT c.name, c.clientId, GROUP_CONCAT(p.name) as programs
+       FROM clients c
+       LEFT JOIN client_programs cp ON c.id = cp.clientId
+       LEFT JOIN programs p ON cp.programId = p.id
+       WHERE c.clientId = ?
+       GROUP BY c.id`,
+      [clientId],
+      (err, row) => {
+        if (err) return res.status(400).json({ error: err.message });
+        if (!row) return res.status(404).json({ error: 'Client not found' });
+        res.json({
+          name: row.name,
+          clientId: row.clientId,
+          programs: row.programs ? row.programs.split(',') : []
+        });
+      }
+    );
+  });
