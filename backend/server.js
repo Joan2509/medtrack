@@ -70,3 +70,26 @@ app.get('/api/programs', (req, res) => {
       res.json(rows);
     });
   });
+
+  // Search for clients
+app.get('/api/clients', (req, res) => {
+    const { search } = req.query;
+    const query = `%${search || ''}%`;
+    db.all(
+      `SELECT c.name, c.clientId, GROUP_CONCAT(p.name) as programs
+       FROM clients c
+       LEFT JOIN client_programs cp ON c.id = cp.clientId
+       LEFT JOIN programs p ON cp.programId = p.id
+       WHERE c.name LIKE ? OR c.clientId LIKE ?
+       GROUP BY c.id`,
+      [query, query],
+      (err, rows) => {
+        if (err) return res.status(400).json({ error: err.message });
+        res.json(rows.map(row => ({
+          name: row.name,
+          clientId: row.clientId,
+          programs: row.programs ? row.programs.split(',') : []
+        })));
+      }
+    );
+  });
