@@ -13,3 +13,10 @@ function login() {
     }
 }
 
+function logout() {
+    token = null;
+    selectedClientId = null;
+    document.getElementById('login').classList.remove('hidden');
+    document.getElementById('main').classList.add('hidden');
+    document.getElementById('profile').classList.add('hidden');
+}
