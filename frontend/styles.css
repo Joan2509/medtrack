@@ -3,23 +3,86 @@ body {
     margin: 0;
     padding: 0;
 }
+
 .container {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
+    padding-top: 70px; /* Adjusted to prevent overlap with fixed navbar */
 }
-h1 {
-    text-align: center;
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #0b5db6;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
 }
+
+.navbar-title {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.nav-buttons {
+    display: none;
+    align-items: center;
+    gap: 10px;
+}
+
+body.logged-in .nav-buttons {
+    display: flex;
+}
+
+.navbar input {
+    width: 200px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-icon {
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 5px;
+    color: white;
+}
+
+.search-icon:hover {
+    color: #e0e0e0;
+}
+
+.navbar button {
+    background: white;
+    color: #007bff;
+    border: 1px solid white;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.navbar button:hover {
+    background: #e0e0e0;
+    color: #0056b3;
+}
+
 .section {
     margin-bottom: 20px;
 }
+
 .form-section {
     background: #f9f9f9;
     padding: 15px;
     border-radius: 5px;
     margin-bottom: 20px;
 }
+
 input, textarea, button {
     display: block;
     width: 100%;
@@ -28,32 +91,44 @@ input, textarea, button {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 button {
     background: #007bff;
     color: white;
     border: none;
     cursor: pointer;
 }
+
 button:hover {
     background: #0056b3;
 }
+
 .error {
     color: red;
 }
+
 .message {
     color: green;
 }
+
 .hidden {
     display: none;
 }
+
 ul {
     list-style: none;
     padding: 0;
 }
+
 ul li {
     padding: 8px;
     cursor: pointer;
 }
+
 ul li:hover {
     background: #e0e0e0;
+}
+
+#search-results {
+    margin-bottom: 20px;
 }
