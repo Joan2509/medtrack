@@ -20,3 +20,33 @@ function logout() {
     document.getElementById('main').classList.add('hidden');
     document.getElementById('profile').classList.add('hidden');
 }
+
+async function createProgram() {
+    const name = document.getElementById('program-name').value;
+    const description = document.getElementById('program-description').value;
+    const message = document.getElementById('program-message');
+
+    if (!name) {
+        message.textContent = 'Program name is required';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/programs', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ name, description })
+        });
+        const data = await response.json();
+        message.textContent = response.ok ? 'Program created' : data.error;
+        if (response.ok) {
+            document.getElementById('program-name').value = '';
+            document.getElementById('program-description').value = '';
+        }
+    } catch (err) {
+        message.textContent = 'Error creating program';
+    }
+}
