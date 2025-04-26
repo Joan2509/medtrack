@@ -84,3 +84,25 @@ async function registerClient() {
         message.textContent = 'Error registering client';
     }
 }
+
+async function searchClients() {
+    const query = document.getElementById('search-query').value;
+    const results = document.getElementById('search-results');
+
+    if (!query) {
+        results.innerHTML = '<li>Please enter a search query</li>';
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/clients/search?query=${encodeURIComponent(query)}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const clients = await response.json();
+        results.innerHTML = clients.length
+            ? clients.map(c => `<li onclick="viewProfile(${c.id})">${c.name} (${c.contact})</li>`).join('')
+            : '<li>No clients found</li>';
+    } catch (err) {
+        results.innerHTML = '<li>Error searching clients</li>';
+    }
+}
