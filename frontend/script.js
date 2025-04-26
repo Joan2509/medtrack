@@ -127,3 +127,32 @@ async function viewProfile(clientId) {
         document.getElementById('profile').innerHTML = '<p>Error loading profile</p>';
     }
 }
+
+async function enrollClient() {
+    const programId = document.getElementById('enroll-program-id').value;
+    const message = document.getElementById('enroll-message');
+
+    if (!programId) {
+        message.textContent = 'Program ID is required';
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/clients/${selectedClientId}/enroll`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ programId })
+        });
+        const data = await response.json();
+        message.textContent = response.ok ? 'Client enrolled' : data.error;
+        if (response.ok) {
+            viewProfile(selectedClientId);
+            document.getElementById('enroll-program-id').value = '';
+        }
+    } catch (err) {
+        message.textContent = 'Error enrolling client';
+    }
+}
