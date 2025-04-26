@@ -8,10 +8,10 @@
 </head>
 <body>
     <nav class="navbar">
-        <h1 class="navbar-title">Health Information System</h1>
+        <h1 class="navbar-title">MedTrack Health System</h1>
         <div class="nav-buttons">
-            <input type="text" id="navbar-search-query" placeholder="Search by name or contact" autocomplete="off" onkeypress="handleSearchKeypress(event)">
             <span class="search-icon" onclick="searchClients()">🔍</span>
+            <input type="text" id="navbar-search-query" placeholder="Search by name/contact" autocomplete="off" onkeypress="handleSearchKeypress(event)">
             <button onclick="logout()">Logout</button>
         </div>
     </nav>
@@ -24,21 +24,23 @@
         </div>
         <div id="main" class="section hidden">
             <ul id="search-results"></ul>
-            <div class="form-section">
-                <h2>Create Program</h2>
-                <input type="text" id="program-name" placeholder="Program Name">
-                <textarea id="program-description" placeholder="Description"></textarea>
-                <button onclick="createProgram()">Create</button>
-                <p id="program-message" class="message"></p>
-            </div>
-            <div class="form-section">
-                <h2>Register Client</h2>
-                <input type="text" id="client-name" placeholder="Name">
-                <input type="date" id="client-dob">
-                <input type="text" id="client-gender" placeholder="Gender">
-                <input type="text" id="client-contact" placeholder="Contact">
-                <button onclick="registerClient()">Register</button>
-                <p id="client-message" class="message"></p>
+            <div class="form-columns">
+                <div class="form-section sidebar">
+                    <h2>Create Program</h2>
+                    <input type="text" id="program-name" placeholder="Program Name">
+                    <textarea id="program-description" placeholder="Description"></textarea>
+                    <button onclick="createProgram()">Create</button>
+                    <p id="program-message" class="message"></p>
+                </div>
+                <div class="form-section register-client">
+                    <h2>Register Client</h2>
+                    <input type="text" id="client-name" placeholder="Name">
+                    <input type="date" id="client-dob">
+                    <input type="text" id="client-gender" placeholder="Gender">
+                    <input type="text" id="client-contact" placeholder="Contact">
+                    <button onclick="registerClient()">Register</button>
+                    <p id="client-message" class="message"></p>
+                </div>
             </div>
             <div id="profile" class="form-section hidden">
                 <h2>Client Profile</h2>
