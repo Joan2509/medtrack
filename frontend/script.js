@@ -8,6 +8,7 @@ function login() {
         document.getElementById('login').classList.add('hidden');
         document.getElementById('main').classList.remove('hidden');
         document.getElementById('login-error').textContent = '';
+        document.body.classList.add('logged-in');
     } else {
         document.getElementById('login-error').textContent = 'Invalid password';
     }
@@ -19,6 +20,7 @@ function logout() {
     document.getElementById('login').classList.remove('hidden');
     document.getElementById('main').classList.add('hidden');
     document.getElementById('profile').classList.add('hidden');
+    document.body.classList.remove('logged-in');
 }
 
 async function createProgram() {
@@ -85,8 +87,14 @@ async function registerClient() {
     }
 }
 
+function handleSearchKeypress(event) {
+    if (event.keyCode === 13) {
+        searchClients();
+    }
+}
+
 async function searchClients() {
-    const query = document.getElementById('search-query').value;
+    const query = document.getElementById('navbar-search-query').value;
     const results = document.getElementById('search-results');
 
     if (!query) {

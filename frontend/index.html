@@ -10,8 +10,8 @@
     <nav class="navbar">
         <h1 class="navbar-title">Health Information System</h1>
         <div class="nav-buttons">
-            <span class="search-icon" onclick="searchClients()"> 🔎</span>
-            <input type="text" id="navbar-search-query" placeholder="Search by name or contact">
+            <input type="text" id="navbar-search-query" placeholder="Search by name or contact" autocomplete="off" onkeypress="handleSearchKeypress(event)">
+            <span class="search-icon" onclick="searchClients()">🔍</span>
             <button onclick="logout()">Logout</button>
         </div>
     </nav>
