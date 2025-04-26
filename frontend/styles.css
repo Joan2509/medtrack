@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+}
+.section {
+    margin-bottom: 20px;
+}
+.form-section {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+input, textarea, button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background: #0056b3;
+}
+.error {
+    color: red;
+}
+.message {
+    color: green;
+}
+.hidden {
+    display: none;
+}
+ul {
+    list-style: none;
+    padding: 0;
+}
+ul li {
+    padding: 8px;
+    cursor: pointer;
+}
+ul li:hover {
+    background: #e0e0e0;
+}
