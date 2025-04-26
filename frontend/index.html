@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Information System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Health Information System</h1>
+        <div id="login" class="section">
+            <h2>Login</h2>
+            <input type="password" id="password" placeholder="Password (doctor123)">
+            <button onclick="login()">Login</button>
+            <p id="login-error" class="error"></p>
+        </div>
+        <div id="main" class="section hidden">
+            <button onclick="logout()">Logout</button>
+            <div class="form-section">
+                <h2>Create Program</h2>
+                <input type="text" id="program-name" placeholder="Program Name">
+                <textarea id="program-description" placeholder="Description"></textarea>
+                <button onclick="createProgram()">Create</button>
+                <p id="program-message" class="message"></p>
+            </div>
+            <div class="form-section">
+                <h2>Register Client</h2>
+                <input type="text" id="client-name" placeholder="Name">
+                <input type="date" id="client-dob">
+                <input type="text" id="client-gender" placeholder="Gender">
+                <input type="text" id="client-contact" placeholder="Contact">
+                <button onclick="registerClient()">Register</button>
+                <p id="client-message" class="message"></p>
+            </div>
+            <div class="form-section">
+                <h2>Search Clients</h2>
+                <input type="text" id="search-query" placeholder="Search by name or contact">
+                <button onclick="searchClients()">Search</button>
+                <ul id="search-results"></ul>
+            </div>
+            <div id="profile" class="form-section hidden">
+                <h2>Client Profile</h2>
+                <p id="profile-name"></p>
+                <p id="profile-dob"></p>
+                <p id="profile-gender"></p>
+                <p id="profile-contact"></p>
+                <h3>Enrolled Programs</h3>
+                <ul id="profile-programs"></ul>
+                <input type="number" id="enroll-program-id" placeholder="Program ID">
+                <button onclick="enrollClient()">Enroll</button>
+                <p id="enroll-message" class="message"></p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
