@@ -1,10 +1,20 @@
 let token = null;
 let selectedClientId = null;
 
+function init() {
+    token = localStorage.getItem('token');
+    if (token) {
+        document.getElementById('login').classList.add('hidden');
+        document.getElementById('main').classList.remove('hidden');
+        document.body.classList.add('logged-in');
+    }
+}
+
 function login() {
     const password = document.getElementById('password').value;
     if (password === 'doctor123') {
         token = 'doctor123';
+        localStorage.setItem('token', token);
         document.getElementById('login').classList.add('hidden');
         document.getElementById('main').classList.remove('hidden');
         document.getElementById('login-error').textContent = '';
@@ -17,10 +27,20 @@ function login() {
 function logout() {
     token = null;
     selectedClientId = null;
+    localStorage.removeItem('token');
     document.getElementById('login').classList.remove('hidden');
     document.getElementById('main').classList.add('hidden');
-    document.getElementById('profile').classList.add('hidden');
+    document.getElementById('profile-modal').classList.add('hidden');
+    document.getElementById('search-dropdown').classList.add('hidden');
     document.body.classList.remove('logged-in');
+}
+
+function closeProfileModal() {
+    document.getElementById('profile-modal').classList.add('hidden');
+}
+
+function hideSearchDropdown() {
+    document.getElementById('search-dropdown').classList.add('hidden');
 }
 
 async function createProgram() {
@@ -95,10 +115,11 @@ function handleSearchKeypress(event) {
 
 async function searchClients() {
     const query = document.getElementById('navbar-search-query').value;
-    const results = document.getElementById('search-results');
+    const dropdown = document.getElementById('search-dropdown');
 
     if (!query) {
-        results.innerHTML = '<li>Please enter a search query</li>';
+        dropdown.innerHTML = '<li>Please enter a search query</li>';
+        dropdown.classList.remove('hidden');
         return;
     }
 
@@ -107,32 +128,40 @@ async function searchClients() {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const clients = await response.json();
-        results.innerHTML = clients.length
+        dropdown.innerHTML = clients.length
             ? clients.map(c => `<li onclick="viewProfile(${c.id})">${c.name} (${c.contact})</li>`).join('')
             : '<li>No clients found</li>';
+        dropdown.classList.remove('hidden');
     } catch (err) {
-        results.innerHTML = '<li>Error searching clients</li>';
+        dropdown.innerHTML = '<li>Error searching clients</li>';
+        dropdown.classList.remove('hidden');
     }
 }
 
 async function viewProfile(clientId) {
     selectedClientId = clientId;
-    document.getElementById('profile').classList.remove('hidden');
+    document.getElementById('profile-modal').classList.remove('hidden');
+    document.getElementById('search-dropdown').classList.add('hidden');
 
     try {
         const response = await fetch(`/api/clients/${clientId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const client = await response.json();
-        document.getElementById('profile-name').textContent = `Name: ${client.name}`;
-        document.getElementById('profile-dob').textContent = `Date of Birth: ${client.dateOfBirth}`;
-        document.getElementById('profile-gender').textContent = `Gender: ${client.gender || 'N/A'}`;
-        document.getElementById('profile-contact').textContent = `Contact: ${client.contact || 'N/A'}`;
-        document.getElementById('profile-programs').innerHTML = client.programs.length
+        document.getElementById('modal-profile-name').textContent = `Name: ${client.name}`;
+        document.getElementById('modal-profile-dob').textContent = `Date of Birth: ${client.dateOfBirth}`;
+        document.getElementById('modal-profile-gender').textContent = `Gender: ${client.gender || 'N/A'}`;
+        document.getElementById('modal-profile-contact').textContent = `Contact: ${client.contact || 'N/A'}`;
+        document.getElementById('modal-profile-programs').innerHTML = client.programs.length
             ? client.programs.map(p => `<li>${p.name}</li>`).join('')
             : '<li>No programs enrolled</li>';
+        document.getElementById('enroll-message').textContent = '';
     } catch (err) {
-        document.getElementById('profile').innerHTML = '<p>Error loading profile</p>';
+        document.getElementById('modal-profile-name').textContent = 'Error loading profile';
+        document.getElementById('modal-profile-dob').textContent = '';
+        document.getElementById('modal-profile-gender').textContent = '';
+        document.getElementById('modal-profile-contact').textContent = '';
+        document.getElementById('modal-profile-programs').innerHTML = '';
     }
 }
 
@@ -164,3 +193,5 @@ async function enrollClient() {
         message.textContent = 'Error enrolling client';
     }
 }
+
+init();

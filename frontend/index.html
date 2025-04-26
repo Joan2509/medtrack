@@ -11,10 +11,26 @@
         <h1 class="navbar-title">MedTrack Health System</h1>
         <div class="nav-buttons">
             <span class="search-icon" onclick="searchClients()">🔍</span>
-            <input type="text" id="navbar-search-query" placeholder="Search by name/contact" autocomplete="off" onkeypress="handleSearchKeypress(event)">
+            <input type="text" id="navbar-search-query" placeholder="Search by name/contact" autocomplete="off" onkeypress="handleSearchKeypress(event)" oninput="searchClients()" onblur="hideSearchDropdown()">
+            <ul id="search-dropdown" class="search-dropdown hidden"></ul>
             <button onclick="logout()">Logout</button>
         </div>
     </nav>
+    <div id="profile-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeProfileModal()">×</span>
+            <h2>Client Profile</h2>
+            <p id="modal-profile-name"></p>
+            <p id="modal-profile-dob"></p>
+            <p id="modal-profile-gender"></p>
+            <p id="modal-profile-contact"></p>
+            <h3>Enrolled Programs</h3>
+            <ul id="modal-profile-programs"></ul>
+            <input type="number" id="enroll-program-id" placeholder="Program ID">
+            <button onclick="enrollClient()">Enroll</button>
+            <p id="enroll-message" class="message"></p>
+        </div>
+    </div>
     <div class="container">
         <div id="login" class="section">
             <h2>Login</h2>
@@ -23,7 +39,6 @@
             <p id="login-error" class="error"></p>
         </div>
         <div id="main" class="section hidden">
-            <ul id="search-results"></ul>
             <div class="form-columns">
                 <div class="form-section sidebar">
                     <h2>Create Program</h2>
@@ -41,18 +56,6 @@
                     <button onclick="registerClient()">Register</button>
                     <p id="client-message" class="message"></p>
                 </div>
-            </div>
-            <div id="profile" class="form-section hidden">
-                <h2>Client Profile</h2>
-                <p id="profile-name"></p>
-                <p id="profile-dob"></p>
-                <p id="profile-gender"></p>
-                <p id="profile-contact"></p>
-                <h3>Enrolled Programs</h3>
-                <ul id="profile-programs"></ul>
-                <input type="number" id="enroll-program-id" placeholder="Program ID">
-                <button onclick="enrollClient()">Enroll</button>
-                <p id="enroll-message" class="message"></p>
             </div>
         </div>
     </div>
