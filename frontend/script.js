@@ -50,3 +50,37 @@ async function createProgram() {
         message.textContent = 'Error creating program';
     }
 }
+
+async function registerClient() {
+    const name = document.getElementById('client-name').value;
+    const dateOfBirth = document.getElementById('client-dob').value;
+    const gender = document.getElementById('client-gender').value;
+    const contact = document.getElementById('client-contact').value;
+    const message = document.getElementById('client-message');
+
+    if (!name || !dateOfBirth) {
+        message.textContent = 'Name and date of birth are required';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/clients', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ name, dateOfBirth, gender, contact })
+        });
+        const data = await response.json();
+        message.textContent = response.ok ? 'Client registered' : data.error;
+        if (response.ok) {
+            document.getElementById('client-name').value = '';
+            document.getElementById('client-dob').value = '';
+            document.getElementById('client-gender').value = '';
+            document.getElementById('client-contact').value = '';
+        }
+    } catch (err) {
+        message.textContent = 'Error registering client';
+    }
+}
