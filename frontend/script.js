@@ -106,3 +106,24 @@ async function searchClients() {
         results.innerHTML = '<li>Error searching clients</li>';
     }
 }
+
+async function viewProfile(clientId) {
+    selectedClientId = clientId;
+    document.getElementById('profile').classList.remove('hidden');
+
+    try {
+        const response = await fetch(`/api/clients/${clientId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const client = await response.json();
+        document.getElementById('profile-name').textContent = `Name: ${client.name}`;
+        document.getElementById('profile-dob').textContent = `Date of Birth: ${client.dateOfBirth}`;
+        document.getElementById('profile-gender').textContent = `Gender: ${client.gender || 'N/A'}`;
+        document.getElementById('profile-contact').textContent = `Contact: ${client.contact || 'N/A'}`;
+        document.getElementById('profile-programs').innerHTML = client.programs.length
+            ? client.programs.map(p => `<li>${p.name}</li>`).join('')
+            : '<li>No programs enrolled</li>';
+    } catch (err) {
+        document.getElementById('profile').innerHTML = '<p>Error loading profile</p>';
+    }
+}
