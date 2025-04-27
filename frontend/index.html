@@ -33,7 +33,6 @@
             <div>
                 <select id="enroll-program-id">
                     <option value="">Select a program...</option>
-                    <!-- Programs will be loaded dynamically -->
                 </select>
                 <button onclick="enrollClient()">Enroll</button>
                 <p id="enroll-message" class="message"></p>
@@ -44,7 +43,7 @@
     <div class="container">
         <div id="login" class="section">
             <h2>Login</h2>
-            <input type="password" id="password" placeholder="Password (hint: 123)">
+            <input type="password" id="password" placeholder="Enter Password">
             <button onclick="login()">Login</button>
             <p id="login-error" class="error"></p>
         </div>
@@ -75,6 +74,11 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="scripts/auth.js"></script>
+    <script type="module" src="scripts/programs.js"></script>
+    <script type="module" src="scripts/clients.js"></script>
+    <script type="module" src="scripts/ui.js"></script>
+    <script type="module" src="scripts/client_profile.js"></script>
+    <script type="module" src="scripts/init.js"></script>
 </body>
 </html>
