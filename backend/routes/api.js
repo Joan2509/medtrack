@@ -112,5 +112,12 @@ router.get('/clients/:clientId', authenticate, (req, res) => {
         );
     });
 });
+// Get all programs
+router.get('/programs', authenticate, (req, res) => {
+    db.all('SELECT * FROM programs', (err, programs) => {
+        if (err) return res.status(500).json({ error: 'Failed to retrieve programs' });
+        res.json(programs);
+    });
+});
 
 module.exports = router;
