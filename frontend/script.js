@@ -155,48 +155,6 @@ async function searchClients() {
     }
 }
 
-async function viewProfile(clientId) {
-    if (!clientId) {
-        console.error('No client ID provided to viewProfile function');
-        return;
-    }
-    
-    selectedClientId = clientId;
-    document.getElementById('profile-modal').classList.remove('hidden');
-    
-    try {
-        console.log(`Fetching profile for client ID: ${clientId}`);
-        const response = await fetch(`/api/clients/${clientId}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        
-        const client = await response.json();
-        
-        document.getElementById('modal-profile-name').textContent = `Name: ${client.name}`;
-        document.getElementById('modal-profile-dob').textContent = `Date of Birth: ${client.dateOfBirth}`;
-        document.getElementById('modal-profile-gender').textContent = `Gender: ${client.gender || 'N/A'}`;
-        document.getElementById('modal-profile-contact').textContent = `Contact: ${client.contact || 'N/A'}`;
-        
-        const programsList = document.getElementById('modal-profile-programs');
-        programsList.innerHTML = client.programs && client.programs.length
-            ? client.programs.map(p => `<li>${p.name}</li>`).join('')
-            : '<li>No programs enrolled</li>';
-        
-        document.getElementById('enroll-message').textContent = '';
-    } catch (err) {
-        document.getElementById('modal-profile-name').textContent = 'Error loading profile';
-        document.getElementById('modal-profile-dob').textContent = '';
-        document.getElementById('modal-profile-gender').textContent = '';
-        document.getElementById('modal-profile-contact').textContent = '';
-        document.getElementById('modal-profile-programs').innerHTML = '';
-        console.error('Profile view error:', err);
-    }
-}
-
 async function enrollClient() {
     const programId = document.getElementById('enroll-program-id').value;
     const message = document.getElementById('enroll-message');
@@ -235,10 +193,46 @@ async function enrollClient() {
     }
 }
 
-// Additional helper function to list all programs (useful for enrollment)
-async function listAllPrograms() {
+// Add this function to load programs into the dropdown
+async function loadProgramDropdown() {
     try {
-        const response = await fetch('/api/programs', {
+        const programs = await fetch('/api/programs', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        }).then(res => res.json());
+        
+        const select = document.getElementById('enroll-program-id');
+        
+        // Clear existing options
+        select.innerHTML = '<option value="">Select a program...</option>';
+        
+        // Add program options
+        programs.forEach(program => {
+            const option = document.createElement('option');
+            option.value = program.id;
+            option.textContent = program.name;
+            select.appendChild(option);
+        });
+    } catch (err) {
+        console.error('Error loading programs for dropdown:', err);
+    }
+}
+
+// Update the viewProfile function to call loadProgramDropdown
+async function viewProfile(clientId) {
+    if (!clientId) {
+        console.error('No client ID provided to viewProfile function');
+        return;
+    }
+    
+    selectedClientId = clientId;
+    document.getElementById('profile-modal').classList.remove('hidden');
+    
+    // Load programs for the dropdown
+    await loadProgramDropdown();
+    
+    try {
+        console.log(`Fetching profile for client ID: ${clientId}`);
+        const response = await fetch(`/api/clients/${clientId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -246,10 +240,26 @@ async function listAllPrograms() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         
-        return await response.json();
+        const client = await response.json();
+        
+        document.getElementById('modal-profile-name').textContent = `Name: ${client.name}`;
+        document.getElementById('modal-profile-dob').textContent = `Date of Birth: ${client.dateOfBirth}`;
+        document.getElementById('modal-profile-gender').textContent = `Gender: ${client.gender || 'N/A'}`;
+        document.getElementById('modal-profile-contact').textContent = `Contact: ${client.contact || 'N/A'}`;
+        
+        const programsList = document.getElementById('modal-profile-programs');
+        programsList.innerHTML = client.programs && client.programs.length
+            ? client.programs.map(p => `<li>${p.name}</li>`).join('')
+            : '<li>No programs enrolled</li>';
+        
+        document.getElementById('enroll-message').textContent = '';
     } catch (err) {
-        console.error('Error fetching programs:', err);
-        return [];
+        document.getElementById('modal-profile-name').textContent = 'Error loading profile';
+        document.getElementById('modal-profile-dob').textContent = '';
+        document.getElementById('modal-profile-gender').textContent = '';
+        document.getElementById('modal-profile-contact').textContent = '';
+        document.getElementById('modal-profile-programs').innerHTML = '';
+        console.error('Profile view error:', err);
     }
 }
 
