@@ -18,10 +18,17 @@ This is a basic health information system designed to manage clients and health 
 
 ``` bash
 medtrack/
-├── frontend/
-│   ├── index.html       # Main HTML with navbar, login, forms, and modal
-│   ├── styles.css       # CSS for layout, sidebar, modal, and navbar
-│   ├── script.js        # Frontend logic (API calls, UI updates, localStorage)
+frontend/
+├── index.html
+├── styles.css
+├── js/
+│   ├── script.js
+│   ├── auth.js
+│   ├── program.js
+│   ├── client.js
+│   ├── ui.js
+│   ├── profile.js
+backend/
 ├── routes/
 │   ├── api.js           # Express routes for API endpoints
 ├── db.js                # SQLite database setup and schema
