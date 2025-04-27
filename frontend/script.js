@@ -1,5 +1,6 @@
 let token = null;
 let selectedClientId = null;
+let selectedProgramIds = []; // Track selected programs
 
 function init() {
     token = localStorage.getItem('token');
@@ -7,6 +8,7 @@ function init() {
         document.getElementById('login').classList.add('hidden');
         document.getElementById('main').classList.remove('hidden');
         document.body.classList.add('logged-in');
+        loadProgramsForRegistration(); // Load programs for registration form
     }
 }
 
@@ -19,6 +21,7 @@ function login() {
         document.getElementById('main').classList.remove('hidden');
         document.getElementById('login-error').textContent = '';
         document.body.classList.add('logged-in');
+        loadProgramsForRegistration(); // Load programs after login
     } else {
         document.getElementById('login-error').textContent = 'Invalid password';
     }
@@ -27,6 +30,7 @@ function login() {
 function logout() {
     token = null;
     selectedClientId = null;
+    selectedProgramIds = [];
     localStorage.removeItem('token');
     document.getElementById('login').classList.remove('hidden');
     document.getElementById('main').classList.add('hidden');
@@ -40,9 +44,19 @@ function closeProfileModal() {
 }
 
 function hideSearchDropdown() {
-    // Add a small delay to allow click events to complete before hiding the dropdown
     setTimeout(() => {
         document.getElementById('search-dropdown').classList.add('hidden');
+    }, 200);
+}
+
+function toggleProgramsDropdown() {
+    const dropdown = document.getElementById('client-programs-dropdown');
+    dropdown.classList.toggle('hidden');
+}
+
+function hideProgramsDropdown() {
+    setTimeout(() => {
+        document.getElementById('client-programs-dropdown').classList.add('hidden');
     }, 200);
 }
 
@@ -72,6 +86,7 @@ async function createProgram() {
         if (response.ok) {
             document.getElementById('program-name').value = '';
             document.getElementById('program-description').value = '';
+            loadProgramsForRegistration(); // Refresh programs dropdown
         }
     } catch (err) {
         message.textContent = 'Error creating program';
@@ -84,6 +99,7 @@ async function registerClient() {
     const dateOfBirth = document.getElementById('client-dob').value;
     const gender = document.getElementById('client-gender').value;
     const contact = document.getElementById('client-contact').value;
+    const programIds = selectedProgramIds; // Use selected programs
     const message = document.getElementById('client-message');
     
     if (!name || !dateOfBirth) {
@@ -98,17 +114,22 @@ async function registerClient() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ name, dateOfBirth, gender, contact })
+            body: JSON.stringify({ name, dateOfBirth, gender, contact, programIds })
         });
         
         const data = await response.json();
-        message.textContent = response.ok ? 'Client registered' : data.error;
+        message.textContent = response.ok 
+            ? programIds.length ? 'Client registered and enrolled in programs' : 'Client registered'
+            : data.error;
         
         if (response.ok) {
             document.getElementById('client-name').value = '';
             document.getElementById('client-dob').value = '';
             document.getElementById('client-gender').value = '';
             document.getElementById('client-contact').value = '';
+            selectedProgramIds = []; // Reset selections
+            document.getElementById('client-programs-input').value = ''; // Clear input
+            loadProgramsForRegistration(); // Refresh dropdown
         }
     } catch (err) {
         message.textContent = 'Error registering client';
@@ -183,7 +204,6 @@ async function enrollClient() {
         message.textContent = response.ok ? 'Client enrolled' : data.error;
         
         if (response.ok) {
-            // Refresh the profile view to show the newly enrolled program
             viewProfile(selectedClientId);
             document.getElementById('enroll-program-id').value = '';
         }
@@ -193,7 +213,6 @@ async function enrollClient() {
     }
 }
 
-// Add this function to load programs into the dropdown
 async function loadProgramDropdown() {
     try {
         const programs = await fetch('/api/programs', {
@@ -202,10 +221,8 @@ async function loadProgramDropdown() {
         
         const select = document.getElementById('enroll-program-id');
         
-        // Clear existing options
         select.innerHTML = '<option value="">Select a program...</option>';
         
-        // Add program options
         programs.forEach(program => {
             const option = document.createElement('option');
             option.value = program.id;
@@ -217,7 +234,64 @@ async function loadProgramDropdown() {
     }
 }
 
-// Update the viewProfile function to call loadProgramDropdown
+async function loadProgramsForRegistration() {
+    try {
+        const response = await fetch('/api/programs', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const programs = await response.json();
+        
+        // Sort programs alphabetically (case-insensitive) as a fallback
+        programs.sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
+        
+        const dropdown = document.getElementById('client-programs-dropdown');
+        if (!dropdown) {
+            console.error('Programs dropdown element not found');
+            return;
+        }
+        dropdown.innerHTML = programs.length
+            ? programs.map(program => `
+                <li class="program-item">
+                    <label class="program-label">
+                        <input type="checkbox" 
+                               value="${program.id}" 
+                               ${selectedProgramIds.includes(program.id.toString()) ? 'checked' : ''} 
+                               onchange="toggleProgramSelection(${program.id}, '${program.name}')">
+                        <span class="program-name">${program.name}</span>
+                    </label>
+                </li>
+            `).join('')
+            : '<li class="program-item no-programs">No programs available</li>';
+
+        // Update input field to show selected programs
+        const selectedPrograms = programs.filter(p => selectedProgramIds.includes(p.id.toString()));
+        const input = document.getElementById('client-programs-input');
+        if (input) {
+            input.value = selectedPrograms.map(p => p.name).join(', ') || 'Select programs...';
+        }
+    } catch (err) {
+        console.error('Error loading programs for registration:', err);
+        const dropdown = document.getElementById('client-programs-dropdown');
+        if (dropdown) {
+            dropdown.innerHTML = '<li class="program-item error">Error loading programs</li>';
+        }
+    }
+}
+
+function toggleProgramSelection(programId, programName) {
+    const index = selectedProgramIds.indexOf(programId.toString());
+    if (index === -1) {
+        selectedProgramIds.push(programId.toString());
+    } else {
+        selectedProgramIds.splice(index, 1);
+    }
+    // Refresh dropdown to update checkbox states and input field
+    loadProgramsForRegistration();
+}
+
 async function viewProfile(clientId) {
     if (!clientId) {
         console.error('No client ID provided to viewProfile function');
@@ -227,7 +301,6 @@ async function viewProfile(clientId) {
     selectedClientId = clientId;
     document.getElementById('profile-modal').classList.remove('hidden');
     
-    // Load programs for the dropdown
     await loadProgramDropdown();
     
     try {
