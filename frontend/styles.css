@@ -30,7 +30,7 @@ body {
 
 .navbar-title {
     margin: 0;
-    font-size: 1.5em;
+    font-size: 1.5rem;
 }
 
 .nav-buttons {
@@ -81,7 +81,7 @@ body.logged-in .nav-buttons {
     left: 30px; /* Align with search input, accounting for search icon */
     width: 180px;
     color: #333;
-    background: rgb(182, 178, 178);
+    background: rgb(127, 125, 125);
     border: 1px solid #ccc;
     border-radius: 4px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -121,7 +121,7 @@ body.logged-in .nav-buttons {
     background: #f9f9f9;
     padding: 15px;
     border-radius: 5px;
-    font-size: 1.9vh;
+    font-size: 1.6vh;
     text-align: center;
 }
 
@@ -222,4 +222,27 @@ ul li {
 
 ul li:hover {
     background: #e0e0e0;
+}
+@media (max-width: 650px) {
+    .form-section {
+        font-size: 1.1vh;
+    }
+}
+@media (max-width: 503px) {
+    .navbar-title {
+        font-size: 1.2em;
+    }
+    .navbar {
+        padding-bottom: 1vh;
+    }
+    .navbar input {
+        width: 120px;
+        font-size: 10px;
+    }
+    .navbar button {
+        border: 1px solid white;
+        padding: 2px 5px;
+        font-size: 12px;
+    }
+
 }

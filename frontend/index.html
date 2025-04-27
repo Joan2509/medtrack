@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Information System</title>
+    <title>MedTrack</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,11 +11,15 @@
         <h1 class="navbar-title">MedTrack Health System</h1>
         <div class="nav-buttons">
             <span class="search-icon" onclick="searchClients()">🔍</span>
-            <input type="text" id="navbar-search-query" placeholder="Search by name/contact" autocomplete="off" onkeypress="handleSearchKeypress(event)" oninput="searchClients()" onblur="hideSearchDropdown()">
+            <input type="text" id="navbar-search-query" placeholder="Search by name/contact" autocomplete="off" 
+                onkeypress="handleSearchKeypress(event)" 
+                oninput="searchClients()" 
+                onblur="hideSearchDropdown()">
             <ul id="search-dropdown" class="search-dropdown hidden"></ul>
             <button onclick="logout()">Logout</button>
         </div>
     </nav>
+
     <div id="profile-modal" class="modal hidden">
         <div class="modal-content">
             <span class="close-button" onclick="closeProfileModal()">×</span>
@@ -26,18 +30,25 @@
             <p id="modal-profile-contact"></p>
             <h3>Enrolled Programs</h3>
             <ul id="modal-profile-programs"></ul>
-            <input type="number" id="enroll-program-id" placeholder="Program ID">
-            <button onclick="enrollClient()">Enroll</button>
-            <p id="enroll-message" class="message"></p>
+            <div>
+                <select id="enroll-program-id">
+                    <option value="">Select a program...</option>
+                    <!-- Programs will be loaded dynamically -->
+                </select>
+                <button onclick="enrollClient()">Enroll</button>
+                <p id="enroll-message" class="message"></p>
+            </div>
         </div>
     </div>
+
     <div class="container">
         <div id="login" class="section">
             <h2>Login</h2>
-            <input type="password" id="password" placeholder="Password (doctor123)">
+            <input type="password" id="password" placeholder="Password (hint: 123)">
             <button onclick="login()">Login</button>
             <p id="login-error" class="error"></p>
         </div>
+
         <div id="main" class="section hidden">
             <div class="form-columns">
                 <div class="form-section sidebar">
@@ -59,6 +70,31 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Add this function to load programs into the dropdown when the modal opens
+        document.getElementById('profile-modal').addEventListener('show', async () => {
+            try {
+                const programs = await listAllPrograms();
+                const select = document.getElementById('enroll-program-id');
+                
+                // Clear existing options except the first one
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+                
+                // Add program options
+                programs.forEach(program => {
+                    const option = document.createElement('option');
+                    option.value = program.id;
+                    option.textContent = program.name;
+                    select.appendChild(option);
+                });
+            } catch (err) {
+                console.error('Error loading programs for dropdown:', err);
+            }
+        });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
