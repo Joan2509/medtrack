@@ -23,14 +23,28 @@ body {
     color: white;
     padding: 17px 20px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     z-index: 1000;
 }
 
+/* Center title when not logged in */
+.navbar:not(.logged-in) {
+    justify-content: center;
+}
+
+/* Layout for logged-in state */
+body.logged-in .navbar {
+    justify-content: space-between;
+}
+
 .navbar-title {
-    margin: 0;
+    margin: 0 auto; /* Center title before login */
     font-size: 1.5rem;
+}
+
+/* Slightly tilt title after login */
+body.logged-in .navbar-title {
+    margin: 0 0 0 70px; /* Shift slightly left of center */
 }
 
 .nav-buttons {
@@ -49,6 +63,7 @@ body.logged-in .nav-buttons {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 8px;
+    font-size: 13px;
 }
 
 .search-icon {
@@ -65,9 +80,11 @@ body.logged-in .nav-buttons {
     background: white;
     color: #7368c0;
     border: 1px solid white;
-    padding: 5px 10px;
+    padding: 5px 15px;
     cursor: pointer;
     border-radius: 4px;
+    width: auto; /* Prevent stretching */
+    font-size: 0.9em;
 }
 
 .navbar button:hover {
@@ -214,6 +231,28 @@ body.logged-in .nav-buttons {
     margin-bottom: 20px;
 }
 
+#login h2 {
+    padding-top: 5vh;
+    text-align: center; /* Center "Login" text */
+    margin: 20px 0; /* Consistent spacing */
+}
+
+#login input {
+    max-width: 300px; /* Fixed width for password input */
+    margin: 0 auto 10px; /* Center input */
+    display: block;
+}
+.login-description {
+    max-width: 700px; /* Limit width for readability */
+    margin: 0 auto 20px; /* Center and space below */
+    padding-top: 35px;
+    background: #f9f9f9; /* Light background for contrast */
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1em;
+    color: #333;
+    line-height: 1.5;
+}
 .form-columns {
     display: flex;
     flex-direction: row;
@@ -228,7 +267,7 @@ body.logged-in .nav-buttons {
     background: #f9f9f9;
     padding: 15px;
     border-radius: 5px;
-    font-size: 1.6vh;
+    font-size: 1.5vh;
     text-align: center;
 }
 
@@ -285,7 +324,7 @@ body.logged-in .nav-buttons {
     color: #7368c0;
 }
 
-input, textarea, button, select {
+input, textarea, select {
     display: block;
     width: 100%;
     margin-bottom: 10px;
@@ -297,10 +336,17 @@ input, textarea, button, select {
 }
 
 button {
+    display: block;
+    width: 150px; /* Fixed width for buttons */
+    margin: 0 auto 10px; /* Center buttons */
+    padding: 8px;
     background: #6056a5;
     color: white;
     border: none;
+    border-radius: 4px;
+    font-size: 1em;
     cursor: pointer;
+    text-align: center;
 }
 
 button:hover {
@@ -333,15 +379,30 @@ ul li:hover {
     background: #e0e0e0;
 }
 
+
 @media (max-width: 650px) {
     .form-section {
-        font-size: 1.1vh;
+        font-size: 0.8vh;
+    }
+    button {
+        width: 120px; /* Smaller buttons on mobile */
+        padding: 6px;
+        font-size: 0.9em;
+    }
+    #login input {
+        width: 180px; /* Slightly smaller input on mobile */
+    }
+    .navbar-title {
+        font-size: 1.1rem; /* Slightly smaller title */
+    }
+    .search-icon {
+        font-size: 1rem;
     }
 }
 
 @media (max-width: 503px) {
     .navbar-title {
-        font-size: 1.2em;
+        font-size: 0.8rem;
     }
     .navbar {
         padding-bottom: 1vh;
@@ -351,8 +412,13 @@ ul li:hover {
         font-size: 10px;
     }
     .navbar button {
-        border: 1px solid white;
-        padding: 2px 5px;
+        padding: 2px 10px;
         font-size: 12px;
+    }
+    body.logged-in .navbar-title {
+        margin: 0 0 0 10px; /* Smaller tilt on very small screens */
+    }
+    #login input {
+        width: 160px; /* Even smaller input on very small screens */
     }
 }
