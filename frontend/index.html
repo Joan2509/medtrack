@@ -71,30 +71,6 @@
         </div>
     </div>
 
-    <script>
-        // Add this function to load programs into the dropdown when the modal opens
-        document.getElementById('profile-modal').addEventListener('show', async () => {
-            try {
-                const programs = await listAllPrograms();
-                const select = document.getElementById('enroll-program-id');
-                
-                // Clear existing options except the first one
-                while (select.options.length > 1) {
-                    select.remove(1);
-                }
-                
-                // Add program options
-                programs.forEach(program => {
-                    const option = document.createElement('option');
-                    option.value = program.id;
-                    option.textContent = program.name;
-                    select.appendChild(option);
-                });
-            } catch (err) {
-                console.error('Error loading programs for dropdown:', err);
-            }
-        });
-    </script>
     <script src="script.js"></script>
 </body>
 </html>
