@@ -1,4 +1,4 @@
-# MedtTrack
+# MedTrack
 This is a basic health information system designed to manage clients and health programs/services.The system allows a doctor to create health programs, register clients, enroll clients in programs, search for clients, view client profiles, and expose client profiles via an API.
 
 ## Innovations and Optimizations
@@ -31,7 +31,7 @@ medtrack/
 └── health.db            # SQLite database file (generated on startup)
 ```
 ## Prerequisites
-- Node.js: v14 or higher
+- Node.js
 - npm: Included with Node.js
 - Git: For cloning the repository
 - SQLite: No separate installation needed (uses sqlite3 npm package)
@@ -77,7 +77,6 @@ Open http://localhost:3000 in a web browser.
 
 4. Search Client: Enter a name or contact in the navbar search, press Enter, and click a result to view the profile modal.
 
-5. Enroll Client: In the profile modal, enter a program ID and click “Enroll”.
 
 ## API Testing:
 ``` bash
