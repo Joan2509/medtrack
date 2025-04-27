@@ -64,6 +64,10 @@
                     <input type="date" id="client-dob">
                     <input type="text" id="client-gender" placeholder="Gender">
                     <input type="text" id="client-contact" placeholder="Contact">
+                    <div class="custom-dropdown">
+                        <input type="text" id="client-programs-input" placeholder="Select programs..." readonly onclick="toggleProgramsDropdown()">
+                        <ul id="client-programs-dropdown" class="programs-dropdown hidden"></ul>
+                    </div>
                     <button onclick="registerClient()">Register</button>
                     <p id="client-message" class="message"></p>
                 </div>
