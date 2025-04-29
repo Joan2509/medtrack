@@ -38,8 +38,8 @@ body.logged-in .navbar {
 }
 
 .navbar-title {
-    margin: 0 auto; /* Center title before login */
-    font-size: 1.5rem;
+    margin: 0 auto;
+    font-size: 1.8rem;
 }
 
 /* Slightly tilt title after login */
@@ -379,46 +379,102 @@ ul li:hover {
     background: #e0e0e0;
 }
 
+@media (max-width: 768px) {
+    .form-columns {
+        flex-direction: column;
+    }
 
-@media (max-width: 650px) {
-    .form-section {
-        font-size: 0.8vh;
+    .form-section.sidebar,
+    .form-section.register-client {
+        padding-top: 3vh;
+        width: 100%;
+        height: 230px;
     }
-    button {
-        width: 120px; /* Smaller buttons on mobile */
-        padding: 6px;
-        font-size: 0.9em;
+
+    .navbar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 0.5rem 1rem;
     }
-    #login input {
-        width: 180px; /* Slightly smaller input on mobile */
-    }
+
     .navbar-title {
-        font-size: 1.1rem; /* Slightly smaller title */
+        flex: 1;
+        text-align: center;
     }
-    .search-icon {
+
+    .nav-buttons {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+        gap: 0.5rem;
         font-size: 1rem;
+    }
+
+    .navbar input {
+        max-width: 200px;
+    }
+
+    .search-icon {
+        height: 26px;
+        line-height: 26px;
+    }
+
+    .search-dropdown {
+        right: 0;
+        width: 100%;
+        max-width: 200px;
+    }
+
+    body.logged-in .navbar-title {
+        margin-left: 0;
     }
 }
 
-@media (max-width: 503px) {
+@media (max-width: 480px) {
     .navbar-title {
-        font-size: 0.8rem;
+        font-size: 1.2rem;
     }
-    .navbar {
-        padding-bottom: 1vh;
-    }
-    .navbar input {
-        width: 120px;
-        font-size: 10px;
-    }
+
     .navbar button {
-        padding: 2px 10px;
-        font-size: 12px;
+        padding: 0 0.6rem;
+        font-size: 0.75rem;
     }
-    body.logged-in .navbar-title {
-        margin: 0 0 0 10px; /* Smaller tilt on very small screens */
+
+    .navbar input {
+        font-size: 0.8rem;
+        padding: 0 0.5rem;
+        max-width: 165px;
     }
+
+    .search-icon {
+        font-size: 1rem;
+
+    }
+
+    .search-dropdown {
+        width: 120px;
+    }
+
     #login input {
-        width: 160px; /* Even smaller input on very small screens */
+        max-width: 100%;
+    }
+
+    button {
+        max-width: 120px;
+        font-size: 0.9rem;
+        padding: 0.4rem;
+    }
+
+    .modal-content {
+        padding: 1rem;
+    }
+
+    .form-section.sidebar,
+    .form-section.register-client {
+        padding-top: 1vh;
+        width: 100%;
+        height: 200px;
+        font-size: 0.8rem;
+
     }
 }
